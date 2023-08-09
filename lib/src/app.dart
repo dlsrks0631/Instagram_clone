@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:insta/src/pages/search.dart';
 import 'components/image_data.dart';
 import 'controller/bottom_nav_controller.dart';
 import 'pages/home.dart';
@@ -14,9 +15,7 @@ class App extends GetView<BottomNavController> {
         () => Scaffold(
           body: IndexedStack(index: controller.pageIndex.value, children: [
             const Home(),
-            Container(
-              child: const Center(child: Text('Search')),
-            ),
+            const Search(),
             Container(
               child: const Center(child: Text('Upload')),
             ),
