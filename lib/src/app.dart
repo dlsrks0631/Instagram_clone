@@ -3,7 +3,9 @@ import 'package:get/get.dart';
 import 'package:insta/src/pages/search.dart';
 import 'components/image_data.dart';
 import 'controller/bottom_nav_controller.dart';
+import 'pages/activity.dart';
 import 'pages/home.dart';
+import 'pages/mypage.dart';
 
 class App extends GetView<BottomNavController> {
   const App({super.key});
@@ -16,15 +18,9 @@ class App extends GetView<BottomNavController> {
           body: IndexedStack(index: controller.pageIndex.value, children: [
             const Home(),
             const Search(),
-            Container(
-              child: const Center(child: Text('Upload')),
-            ),
-            Container(
-              child: const Center(child: Text('Activity')),
-            ),
-            Container(
-              child: const Center(child: Text('MyPage')),
-            ),
+            Container(),
+            const ActiveHistory(),
+            const MyPage(),
           ]),
           bottomNavigationBar: BottomNavigationBar(
             type: BottomNavigationBarType.fixed, // 하단바 고정

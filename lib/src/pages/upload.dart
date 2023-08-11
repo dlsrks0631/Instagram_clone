@@ -1,6 +1,7 @@
 import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:photo_manager/photo_manager.dart';
 import '../components/image_data.dart';
 
@@ -79,7 +80,9 @@ class _UploadState extends State<Upload> {
           backgroundColor: Colors.white,
           elevation: 0,
           leading: GestureDetector(
-            onTap: () {},
+            onTap: () {
+              Get.back;
+            },
             child: Padding(
               padding: const EdgeInsets.all(15.0),
               child: ImageData(IconsPath.closeImage),
@@ -119,18 +122,71 @@ class _UploadState extends State<Upload> {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Row(
-              children: [
-                Text(
-                  headerTitle,
-                  style: const TextStyle(
-                    fontSize: 16,
+          GestureDetector(
+            onTap: () {
+              showModalBottomSheet(
+                context: context,
+                shape: const RoundedRectangleBorder(
+                  borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(20),
+                    topRight: Radius.circular(20),
                   ),
                 ),
-                const Icon(Icons.arrow_drop_down),
-              ],
+                isScrollControlled:
+                    albums.length > 10 ? true : false, // 위로 끝까지 올라감
+                constraints: BoxConstraints(
+                    maxHeight: MediaQuery.of(context).size.height -
+                        MediaQuery.of(context).padding.top),
+                builder: (_) => SizedBox(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      Center(
+                        child: Container(
+                          margin: const EdgeInsets.only(top: 7),
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(10),
+                            color: Colors.black,
+                          ),
+                          width: 40,
+                          height: 4,
+                        ),
+                      ),
+                      Expanded(
+                        child: SingleChildScrollView(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.stretch,
+                            children: List.generate(
+                              albums.length,
+                              (index) => Container(
+                                padding: const EdgeInsets.symmetric(
+                                    vertical: 15, horizontal: 20),
+                                child: Text(
+                                  albums[index].name,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              );
+            },
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Row(
+                children: [
+                  Text(
+                    headerTitle,
+                    style: const TextStyle(
+                      fontSize: 16,
+                    ),
+                  ),
+                  const Icon(Icons.arrow_drop_down),
+                ],
+              ),
             ),
           ),
           Row(
@@ -198,11 +254,18 @@ class _UploadState extends State<Upload> {
       itemCount: imageList.length,
       itemBuilder: (BuildContext context, int index) {
         return _photoWidget(imageList[index], 200, builder: (data) {
-          return Opacity(
-            opacity: imageList[index] == selectedImage ? 0.3 : 1,
-            child: Image.memory(
-              data,
-              fit: BoxFit.cover,
+          return GestureDetector(
+            onTap: () {
+              // 다른 사진 클릭 시 selectedImage 변경
+              selectedImage = imageList[index];
+              update();
+            },
+            child: Opacity(
+              opacity: imageList[index] == selectedImage ? 0.3 : 1,
+              child: Image.memory(
+                data,
+                fit: BoxFit.cover,
+              ),
             ),
           );
         });
